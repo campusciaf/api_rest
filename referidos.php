@@ -10,7 +10,7 @@ header('Content-Type: application/json');
 
 
 $_respuestas =new respuestas;
-$_referidos =new referidos;
+$_referidos =new misreferidos;
 
 if($_SERVER["REQUEST_METHOD"] == "GET"){
     

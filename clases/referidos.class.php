@@ -8,7 +8,7 @@ require 'src/Exception.php';
 require 'src/PHPMailer.php';
 require 'src/SMTP.php';
 
-class referidos extends ConexionCrud{
+class misreferidos extends ConexionCrud{
 
     private $table= "on_interesados";
     private $table2= "on_periodo_actual";
