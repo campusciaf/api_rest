@@ -1,18 +1,16 @@
 <?php
 require_once 'clases/respuestas.class.php';
-require_once 'clases/agregarDatos.class.php';
-
+require_once 'clases/registro.class.php';
 header("Access-Control-Allow-Origin: *");// quita el bloqueo cros 
 // header('Access-Control-Allow-Origin: https://ciaf.edu.co/');
-
-
+header('Access-Control-Allow-Origin: http://localhost:4200');
 header("Access-Control-Allow-Headers: Origin,Autorizacion");
 header("Access-Control-Allow-Headers: Origin, autorizacion, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
 header('Content-Type: application/json');
 
 
 $_respuestas =new respuestas;
-$_agregarDatos =new agregarDatos;
+$_consulta =new miregistro;
 
 if($_SERVER["REQUEST_METHOD"] == "GET"){
     
@@ -22,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
     $postBody= file_get_contents("php://input");
     // enviamos esto al manejador
     
-    $datosArray = $_agregarDatos->insertaragregarDatos($postBody);
+    $datosArray = $_consulta->registrar($postBody);
     // devolvemos una respuesta
    
        header('Content-Type: application/json');
