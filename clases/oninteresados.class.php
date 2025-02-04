@@ -6,6 +6,8 @@ require_once 'respuestas.class.php';
 class datos extends ConexionCrud{
     private $table= "on_interesados";
     private $table2="on_interesados_token" ;
+    private $table3="programa_ac" ;
+    private $table4="lista_precio_programa";
 
     private $id_user="";
     private $usuario_tema="";
@@ -14,6 +16,28 @@ class datos extends ConexionCrud{
     public function oninteresados($id,$token){
         $query = "SELECT * FROM " . $this->table . " tab1 INNER JOIN " . $this->table2 . " tab2 on tab1.id_estudiante=tab2.id_estudiante WHERE tab1.id_estudiante= '$id' and tab2.on_interesados_token='$token'";
         return parent::listar($query);
+    }
+
+
+    public function datosprograma($json){
+        $_respuestas =new respuestas;
+        $datos = json_decode($json,true);
+  
+        if(!isset($datos['programa_ac'])){
+            // error con los campos
+            return $_respuestas->error_400();
+        }else{
+            $datosperiodo = $this->onPeriodoActual();
+            $periodo_actual=$datosperiodo[0]["periodo_campana"];
+
+            $programa = $datos["programa_ac"];
+            $query = "SELECT 
+            tab3.id_programa,tab3.carnet,
+            tab4.*
+            FROM " . $this->table3 . " tab3 INNER JOIN " . $this->table4 . " tab4 on tab3.id_programa=tab4.id_programa  
+            WHERE tab3.nombre= '$programa' AND tab4.periodo='$periodo_actual' AND tab4.semestre=1";
+            return parent::listar($query);
+        }   
     }
 
     public function actualizarTema($json){// PUT toma los datos del formulario para editar un usuario
@@ -79,6 +103,19 @@ class datos extends ConexionCrud{
             return 0;
         }
         
+    }
+
+    private function onPeriodoActual(){
+
+        $query = "SELECT * FROM on_periodo_actual ";
+        $resp = parent::listar($query);
+        if($resp){
+            return $resp;
+        }
+        else{
+            return 0;
+        }
+
     }
 
 }
